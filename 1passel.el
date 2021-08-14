@@ -1,6 +1,6 @@
 (require 'json)
 
-(defun 1passel-filter-data (x)
+(defun 1passel-extract-title-uuid (x)
   "Filters the JSON coming from 1password; extracts the name of the account (title) and the UUID"
  (cons (gethash "title" (gethash "overview" x)) (gethash "uuid" x)))
 
@@ -14,17 +14,15 @@
 	 (json-array-type 'list)
 	 (json-key-type 'string)
 	 (json (json-read-from-string (shell-command-to-string (format "op list items --session=%s" 1passel-session))))
-	 (filtered-ids (mapcar '1passel-filter-data json)))
-        (ivy-read "Search Password: "
-	      (mapcar 'car filtered-ids)
-	      :action (lambda (x)
-			(replace-regexp-in-string "\n\\'" ""
-						  (kill-new
-						   (shell-command-to-string
-						    (format
-						     "op get item %s --session=%s --fields password"
-						     (cdr (assoc x filtered-ids)) 1passel-session)))))))
-  (message "Copied to clipboard"))
+	 (filtered-ids (mapcar '1passel-extract-title-uuid json)))
+    (replace-regexp-in-string "\n\\'" ""
+			      (kill-new
+			       (shell-command-to-string
+				(format
+				 "op get item %s --session=%s --fields password"
+				 (cdr (assoc (completing-read "Search Password: "  (mapcar 'car filtered-ids))
+					     filtered-ids)) 1passel-session)))))
+(message "Copied to clipboard"))
 
 (defun 1passel-login ()
   "Creates a new login session for 1password. Stores the session in the variable 1passel-session"  
