@@ -1,6 +1,7 @@
-# 1 PassEl (Work in Progress)
+# 1PassEl | 1Password integration in Emacs (Work in Progress)
 
-1passel is a simple integration for 1password into emacs. I find this useful to be used with EXWM. Depends on a completion package to generate a searchable list of accounts from which to retrieve the accounts. 
+1passel is a very simple tool to integrate 1password into emacs. I find this useful to be used within the EXWM desktop environment. With this I can get my password anywhere with a few keystrokes.
+
 
 
 ## Installation
@@ -26,7 +27,7 @@ A part from the usual installation you can install this using [straight](https:/
 Logs to 1password and saves the session token for later use. If you use 2FA the first time you will need to run:
 
 ```bash
-	op signin
+op signin
 ```
 
 On your command line.
