@@ -1,10 +1,19 @@
 # 1 PassEl (Work in Progress)
 
-## Introduction
-
-1passel is a simple integration for 1password into emacs. I find this useful to be used with EXWM. Depends on a completion package to generate a searchable list of accounts from which to retrieve the accounts.
+1passel is a simple integration for 1password into emacs. I find this useful to be used with EXWM. Depends on a completion package to generate a searchable list of accounts from which to retrieve the accounts. 
 
 It makes use of the [command line](https://1password.com/downloads/command-line/) interface provided by 1password.
+
+## Installation
+
+A part from the usual installation you can install this using [straight]()
+
+```elisp
+    (use-package 1passel
+      :straight '(1passel :host github
+                                     :repo "vinid/1passel"
+                                     :branch "master"))
+```
 
 ## Commands
 
