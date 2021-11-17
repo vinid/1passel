@@ -27,15 +27,29 @@
 (defun 1passel-extract-loop (json-data)
   "Filters the JSON coming from 1password; extracts the name of the account (title) and the UUID"  
   (cl-loop for x in json-data
-         collect (cons (gethash "title" (gethash "overview" x)) (gethash "uuid" x))))
+	   collect (cons (gethash "title" (gethash "overview" x)) (gethash "uuid" x))))
+
+(shell-command-to-string (format "op list items"))
+
+(defun json-or-login ()
+  (let* ((json (shell-command-to-string (format "op list items --session=%s" 1passel-session))))
+    (if (string-match-p (regexp-quote "ERROR") json)
+	(progn
+	  (1passel-login)
+	  (json-read-from-string (shell-command-to-string (format "op list items --session=%s" 1passel-session))))
+      (json-read-from-string json))))
+
+
+
 
 (defun 1passel-get-password ()
   "Prompts for a list of accounts. Once one is selected, the password is extracted from 1password"
   (interactive)
+  
   (let* ((json-object-type 'hash-table)
 	 (json-array-type 'list)
 	 (json-key-type 'string)
-	 (json (json-read-from-string (shell-command-to-string (format "op list items --session=%s" 1passel-session))))
+	 (json (json-or-login))
 	 (filtered-ids (1passel-extract-loop json)))
     (string-trim
      (kill-new
@@ -48,7 +62,6 @@
 
 (defun 1passel-login ()
   "Creates a new login session for 1password. Stores the session in the variable 1passel-session"  
-  (interactive)
   (setq 1passel-session
 	(string-trim
 	 (shell-command-to-string   
