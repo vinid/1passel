@@ -22,9 +22,9 @@ A part from the usual installation you can install this using [straight](https:/
 
 1passel exposes two interactive commands
 
-### M-x 1passel-login
+### First Login
 
-Logs to 1password and saves the session token for later use. If you use 2FA the first time you will need to run:
+If you use 2FA the first time you will need to run:
 
 ```bash
 op signin
@@ -34,7 +34,7 @@ On your command line.
 
 ### M-x 1passel-get-password
 
-Allows for password search. It simply runs the command to get the accounts and allows for the extraction of a particular password that is then copied to clip-board.
+Allows for password search. Logs in if you are logged out. It simply runs the command to get the accounts and allows for the extraction of a particular password that is then copied to clip-board.
 
 
 ## Useful Links

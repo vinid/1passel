@@ -39,9 +39,6 @@
 	  (json-read-from-string (shell-command-to-string (format "op list items --session=%s" 1passel-session))))
       (json-read-from-string json))))
 
-
-
-
 (defun 1passel-get-password ()
   "Prompts for a list of accounts. Once one is selected, the password is extracted from 1password"
   (interactive)
