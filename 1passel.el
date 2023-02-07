@@ -58,7 +58,7 @@
   (message "Copied to clipboard"))
 
 (defun 1passel-login ()
-  "Creates a new login session for 1password. Stores the session in the variable 1passel-session" ]
+  "Creates a new login session for 1password. Stores the session in the variable 1passel-session" 
   (interactive)
   (setq 1passel-session
 	(string-trim
