@@ -25,18 +25,19 @@
   "session-token")
 
 (defun 1passel-extract-loop (json-data)
-  "Filters the JSON coming from 1password; extracts the name of the account (title) and the UUID"  
-  (cl-loop for x in json-data
-	   collect (cons (gethash "title" (gethash "overview" x)) (gethash "uuid" x))))
+  "Filters the JSON coming from 1password; extracts the name of the account (title) and the id using map"
+  (cl-map 'list 'access-values content))
 
-(shell-command-to-string (format "op list items"))
+(defun access-values (piece)
+  "1password returns associative list, so this function is used to extract data"
+  (cons (cdr (assoc 'title piece)) (cdr (assoc 'id piece))))
 
 (defun json-or-login ()
-  (let* ((json (shell-command-to-string (format "op list items --session=%s" 1passel-session))))
+  (let* ((json (shell-command-to-string (format "op item list --session=%s --format=json" 1passel-session))))
     (if (string-match-p (regexp-quote "ERROR") json)
 	(progn
 	  (1passel-login)
-	  (json-read-from-string (shell-command-to-string (format "op list items --session=%s" 1passel-session))))
+	  (json-read-from-string (shell-command-to-string (format "op item list --session=%s" 1passel-session))))
       (json-read-from-string json))))
 
 (defun 1passel-get-password ()
@@ -52,7 +53,7 @@
      (kill-new
       (shell-command-to-string
        (format
-	"op get item %s --session=%s --fields password"
+	"op item get %s --session=%s --fields password"
 	(cdr (assoc (completing-read "Search Password: "  (mapcar 'car filtered-ids))
 		    filtered-ids)) 1passel-session)))))
   (message "Copied to clipboard"))
