@@ -26,7 +26,7 @@
 
 (defun 1passel-extract-loop (json-data)
   "Filters the JSON coming from 1password; extracts the name of the account (title) and the id using map"
-  (cl-map 'list 'access-values content))
+  (cl-map 'list 'access-values json-data))
 
 (defun access-values (piece)
   "1password returns associative list, so this function is used to extract data"
@@ -44,10 +44,7 @@
   "Prompts for a list of accounts. Once one is selected, the password is extracted from 1password"
   (interactive)
   
-  (let* ((json-object-type 'hash-table)
-	 (json-array-type 'list)
-	 (json-key-type 'string)
-	 (json (json-or-login))
+  (let* ((json (json-or-login))
 	 (filtered-ids (1passel-extract-loop json)))
     (string-trim
      (kill-new
